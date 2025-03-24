@@ -1,28 +1,35 @@
 package api
 
-
 import (
+	"log"
 	"net/http"
+	"os"
+
+	auth "github.com/Two-Skoopz-Development/biblestudy-api/internal/api/middleware"
+	"github.com/Two-Skoopz-Development/biblestudy-api/internal/api/routes"
+	"github.com/clerk/clerk-sdk-go/v2"
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
 
+func StartServer() {
 
-func RunApiServer() {
+	r := routes.ConfigureRouter()
 
-	r := mux.NewRouter()
+	r.MuxRouter.Use(mux.CORSMethodMiddleware(r.MuxRouter))
+	r.MuxRouter.Use(auth.AuthMiddlware)
+	apiKey := os.Getenv("CLERK_SECRET")
+	// apiKey := "sk_test_bQ897iJxnDcVExE6qFPTM75ABlbYlBagS7ozxtQzp0"
+	clerk.SetKey(apiKey)
 
-	r.HandleFunc("/foo", fooHandler).Methods(http.MethodGet, http.MethodPut, http.MethodPatch, http.MethodOptions)
-	r.Use(mux.CORSMethodMiddleware(r))
+	corsHandler := handlers.CORS(
+		handlers.AllowedOrigins([]string{"*"}), // Allow all origins (for development, restrict in production)
+		handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}),
+		handlers.AllowedHeaders([]string{"Content-Type", "Authorization"}),
+		handlers.AllowCredentials(),
+	)
+	handler := corsHandler(r.MuxRouter)
 
-	http.ListenAndServe(":8080", r)
+	log.Fatal(http.ListenAndServe(":8080", handler), nil)
 
-}
-
-func fooHandler(w http.ResponseWriter, r *http.Request) {
-    w.Header().Set("Access-Control-Allow-Origin", "*")
-    if r.Method == http.MethodOptions {
-        return
-    }
-
-    w.Write([]byte("foo"))
 }
