@@ -2,12 +2,10 @@ package auth
 
 import (
 	"context"
-	"encoding/json"
-	"log"
 	"net/http"
 	"time"
 
-	"github.com/Two-Skoopz-Development/biblestudy-api/internal/api/responses"
+	"github.com/Two-Skoopz-Development/biblestudy-api/internal/utils"
 	"github.com/clerk/clerk-sdk-go/v2"
 	clerkhttp "github.com/clerk/clerk-sdk-go/v2/http"
 	"github.com/clerk/clerk-sdk-go/v2/user"
@@ -43,14 +41,8 @@ func AuthMiddlware(next http.Handler) http.Handler {
 		err := claims.ValidateWithLeeway(time.Now(), 0)
 
 		if !ok || err != nil {
-			response := responses.StatusMessage{Message: "unauthoraized"}
-			payload, err := json.Marshal(response)
-			if err != nil {
-				log.Println("Error: error marshalling json")
-			}
-			w.Header().Set("Content-Type", "application/json")
-			w.WriteHeader(http.StatusUnauthorized)
-			w.Write(payload)
+
+			utils.WriteError(w, "unauthorized", http.StatusUnauthorized)
 			return
 		}
 

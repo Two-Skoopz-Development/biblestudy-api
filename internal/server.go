@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"os"
 
-	auth "github.com/Two-Skoopz-Development/biblestudy-api/internal/api/middleware"
-	"github.com/Two-Skoopz-Development/biblestudy-api/internal/api/routes"
+	auth "github.com/Two-Skoopz-Development/biblestudy-api/internal/middleware"
+	"github.com/Two-Skoopz-Development/biblestudy-api/internal/routes"
 	"github.com/clerk/clerk-sdk-go/v2"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"

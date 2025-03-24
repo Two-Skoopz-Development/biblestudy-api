@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"github.com/Two-Skoopz-Development/biblestudy-api/internal/api/services"
+	"github.com/Two-Skoopz-Development/biblestudy-api/internal/services"
 	"github.com/gorilla/mux"
 )
 

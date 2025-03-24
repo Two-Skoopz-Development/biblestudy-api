@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	apiServer "github.com/Two-Skoopz-Development/biblestudy-api/internal/api"
+	server "github.com/Two-Skoopz-Development/biblestudy-api/internal"
 	"github.com/joho/godotenv"
 )
 
@@ -13,5 +13,5 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
-	apiServer.StartServer()
+	server.StartServer()
 }
